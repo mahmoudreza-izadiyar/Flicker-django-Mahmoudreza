@@ -1,4 +1,45 @@
+
 {% extends 'flikcr_api/layout.html' %}
+{% load static %}
+
+
+
+
+
 {% block body %}
-edit
+<div class="container">
+    <div class="panel panel-primary" id="result_panel">
+    <div class="panel-heading"><h3 class="panel-title">List of Presets of Locations</h3>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group" style="
+        max-height: 300px;
+        margin-bottom: 25px;
+        overflow:scroll;
+        -webkit-overflow-scrolling: touch;">
+
+        {% for preset in presets%}
+        <li class="list-group-item">
+            <strong>{{ preset.locationName }}</strong>(Lat:{{ preset.latitude }}--Lan:{{ preset.longitude }})
+            </li>
+        {% endfor %}
+
+
+
+        </ul>
+    </div>
+</div>
+
+
+</div>
+<div class="container">
+
+
+  <form method="POST" >{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Save"/>
+        </form>
+</div>
+
+
 {% endblock %}

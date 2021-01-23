@@ -6,9 +6,11 @@ class Preset(models.Model):
     locationName = models.CharField(max_length=100)
     latitude = models.FloatField(
         validators=[MinValueValidator(-90), MaxValueValidator(90)],
+        null=False
     )
     longitude = models.FloatField(
         validators=[MinValueValidator(-180), MaxValueValidator(180)],
+        null=False
     )
     objects = models.Manager()
 

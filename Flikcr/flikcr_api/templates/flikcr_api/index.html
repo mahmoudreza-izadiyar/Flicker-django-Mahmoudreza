@@ -1,37 +1,24 @@
 {% extends 'flikcr_api/layout.html' %}
+{% load static %}
+
 
 {% block body %}
 <div class="container">
 
 
-  <form>
+  <form method="POST" action="{% url 'searchPresets' %}">{% csrf_token %}
+
 
     <p>
-    <div class="form-row align-items-center">
-      <div class="col-auto">
-        <label class="sr-only" for="inlineFormInput">latitude </label>
-        <input type="text" class="form-control mb-2" id="latitude" placeholder="Insert latitude ">
-      </div>
-      <div class="col-auto">
-        <label class="sr-only" for="inlineFormInput">longitude</label>
-        <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Insert longitude">
-      </div>
-      <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-2">Search</button>
-      </div>
-      </p>
-    </div>
-    <p>
-    <h3>Or Search by Presets Locations</h3>
+    <h3>Search by Presets Locations</h3>
     <div class="col-auto">
-      <select class="custom-select custom-select-md mb-3">
+      <select class="custom-select custom-select-md mb-3" name="city">
         <option selected>Chose from Preset Locations</option>
+
         {% for preset in presets%}
-        <option value="2">{{ preset.locationName }}</option>
+        <option  value="{{ preset.id }}">{{ preset.locationName }}</option>
         {% endfor %}
 
-        <option value="2">Two</option>
-        <option value="3">Three</option>
       </select>
     </div>
     <div class="col-auto">
@@ -42,5 +29,19 @@
 
   </form>
 </div>
+<div class="container">
+
+  <p>
+ {{ city.locationName }}
+</p>
+<p>
+{{ city.longitude }}
+ </p>
+  <p>
+{{ city.latitude }}
+</p>
+
+</div>
+
 
 {% endblock %}
