@@ -10,8 +10,10 @@ class Preset(models.Model):
     longitude = models.FloatField(
         validators=[MinValueValidator(-180), MaxValueValidator(180)],
     )
+    objects = models.Manager()
 
-class FavouritPlaces(models.Model):
+
+class FavouritePlaces(models.Model):
     locationName = models.CharField(max_length=100)
     latitude = models.FloatField(
         validators=[MinValueValidator(-90), MaxValueValidator(90)],
@@ -19,3 +21,4 @@ class FavouritPlaces(models.Model):
     longitude = models.FloatField(
         validators=[MinValueValidator(-180), MaxValueValidator(180)],
     )
+    objects = models.Manager()
