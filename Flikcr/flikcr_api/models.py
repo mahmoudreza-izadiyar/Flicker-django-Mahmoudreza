@@ -16,7 +16,7 @@ class Preset(models.Model):
 
 
 class FavouritePlaces(models.Model):
-    locationName = models.CharField(max_length=100)
+    url = models.URLField(max_length=200, blank=False, default='')
     latitude = models.FloatField(
         validators=[MinValueValidator(-90), MaxValueValidator(90)],
     )

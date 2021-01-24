@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator
 import flickrapi
 from .models import Preset, FavouritePlaces
 from .forms import PresetForm
@@ -7,6 +8,7 @@ api_key = "02df6aacd6e20bed557b78d7dc1d143a"
 secret_api_key = "5a2087a02ab2540c"
 flickr = flickrapi.FlickrAPI(api_key, secret_api_key)
 
+
 # Search function
 def search(lat, lon):
     # Calling Flickr API and Create Photos object
@@ -14,22 +16,39 @@ def search(lat, lon):
     photos = obj['photos']['photo']
 
     # Create photo addresses
-    adresses = []
+    addresses = []
     for photo in photos:
         farm_id = photo['farm']
         server_id = photo['server']
         id = photo['id']
         secret = photo['secret']
         address = f"https://farm{farm_id}.staticflickr.com/{server_id}/{id}_{secret}.jpg"
-        adresses.append(address)
-    return adresses
+        addresses.append(address)
+    return addresses
 
 
-# Search photos with presets
-def index(request):
+def searchByLatAndLon(request):
     presets = Preset.objects.all()
-    cityid = ""
     addresses = ""
+    if request.method == 'POST':
+        lon = request.POST.get('longitude')
+        lat = request.POST.get('latitude')
+        addresses = search(lat, lon)
+
+    context = {
+        'addresses': addresses,
+        "presets": presets,
+
+    }
+    return render(request, 'flikcr_api/index.html', context)
+
+
+# Function that will return urls of input location pictures
+def searchCities(request):
+    cityid = ""
+    addresses = []
+    presets = {}
+    page = ""
 
     if request.method == 'POST':
         presets = Preset.objects.all()
@@ -38,55 +57,66 @@ def index(request):
         lat = cityid.latitude
         lon = cityid.longitude
         addresses = search(lat, lon)
-        print(cityid.longitude)
-        print(cityid.latitude)
-        print(addresses)
-
-
-
+        address_paginator = Paginator(addresses, 10)
+        page_num = request.GET.get('page', 1)
+        page = address_paginator.get_page(page_num)
 
     context = {
         'addresses': addresses,
         "city": cityid,
         "presets": presets,
+        "page": page,
+    }
+
+    return render(request, 'flikcr_api/index.html', context)
+
+
+# Index Page
+def index(request):
+    presets = Preset.objects.all()
+
+    context = {
+        "presets": presets,
     }
     return render(request, 'flikcr_api/index.html', context)
 
 
-# search photos with lon and lat
+# Lon and Lat search page
 def searchLatLon(request):
+    presets = Preset.objects.all()
+    lon = ""
+    lat = ""
+    addresses = ""
+    page = ""
     if request.method == 'POST':
         lon = request.POST.get('longitude')
-        lat= request.POST.get('latitude')
+        lat = request.POST.get('latitude')
         addresses = search(lat, lon)
-
-    else:
-        lon = ""
-        lat = ""
-        addresses = ""
-
+        address_paginator = Paginator(addresses, 10)
+        page_num = request.GET.get('page', 1)
+        page = address_paginator.get_page(page_num)
 
     context = {
-        'addresses': addresses,
+        "page": page,
+        "addresses": addresses,
+        "presets": presets,
         "longitude": lon,
         "latitude": lat,
 
     }
-    return render(request, 'flikcr_api/searchLatLon.html', context)
+    return render(request, 'flikcr_api/index.html', context)
 
 
-# show the Favourite list
+global mah
+
+
+# favourites Page
 def favourites(request):
+    return render(request, 'flikcr_api/fav.html', {})
 
 
-    context = {
-
-    }
-    return render(request, 'flikcr_api/fav.html', context)
-
-
-# Edite presets in database
-def edit(request):
+# Add presets in database
+def add(request):
     # Send new object to the model
     presets = Preset.objects.all()
     form = PresetForm(request.POST or None)

@@ -5,8 +5,10 @@ from . import views
 urlpatterns = [
 
     path('searchPresets/', views.index, name='searchPresets'),
-    path('searchLatLon/', views.searchLatLon, name='searchLatLon'),
+    path('searchByLatAndLon/',views.searchLatLon, name='searchByLatAndLon'),
+    path('searchCities/', views.searchCities, name='searchCities'),
     path('favourites/', views.favourites, name='fav'),
-    path('editPreset/', views.edit, name='edit'),
+    path('addPreset/', views.add, name='add'),
+    path('', views.index, name='searchPresets'),
 
 ]
