@@ -3,5 +3,11 @@
 {% load static %}
 {% block body %}
 
+{% for address in addresses %}
 
+    <img src="{{address}}"  width="80" height="80">
+{% endfor %}
+
+
+{{ addresses }}
 {% endblock %}

@@ -24,3 +24,5 @@ class FavouritePlaces(models.Model):
         validators=[MinValueValidator(-180), MaxValueValidator(180)],
     )
     objects = models.Manager()
+
+

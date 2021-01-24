@@ -26,8 +26,18 @@
 </form>
   </div>
 <div class="container">
+
+  <div class="container">
+    {% for address in addresses %}
+    <img src="{{address}}"  width="120" height="120">
+    {% endfor %}
+
+  </div>
+
+
   your longitude is : {{ longitude }}
   your latitude is : {{ latitude }}
+  {{ addresses }}
 
 </div>
 

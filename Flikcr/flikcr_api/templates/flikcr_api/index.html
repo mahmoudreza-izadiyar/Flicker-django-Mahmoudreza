@@ -32,16 +32,27 @@
 <div class="container">
 
   <p>
- {{ city.locationName }}
+ city :
+
+  <h3>{{ city.locationName }}</h3>
 </p>
 <p>
-{{ city.longitude }}
+  longitude:
+  <h3>{{ city.longitude }}</h3>
  </p>
   <p>
-{{ city.latitude }}
+    latitude:
+    <h3>
+{{ city.latitude }}</h3>
 </p>
 
 </div>
+  <div class="container">
+    {% for address in addresses %}
+    <img src="{{address}}"  width="120" height="120">
+    {% endfor %}
 
+  </div>
 
+{{ addresses }}
 {% endblock %}
